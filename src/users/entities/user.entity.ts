@@ -1,16 +1,24 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity({ name: 'cities' })
+@Entity({ name: 'users' })
 export class User {
+  // primary id of user
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
+  // username of user
   @Column({ unique: true })
-  name: string;
+  username: string;
 
+  // description of user
   @Column({ type: 'text', nullable: true })
   description: string;
 
-  @Column({ type: 'boolean', default: true })
-  active: boolean;
+  //users current vertical line position
+  @Column({ type: 'float8', nullable: true })
+  long: number;
+
+  //users current horizontal line position
+  @Column({ type: 'float8', nullable: true })
+  lat: number;
 }
