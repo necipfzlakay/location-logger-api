@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { UsersModule } from './users/users.module';
 import { LogsModule } from './logs/logs.module';
+import { AreasModule } from './areas/areas.module';
+import { LocationsModule } from './locations/locations.module';
 
 @Module({
   imports: [
@@ -29,6 +31,8 @@ import { LogsModule } from './logs/logs.module';
     }),
     UsersModule,
     LogsModule,
+    AreasModule,
+    LocationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
