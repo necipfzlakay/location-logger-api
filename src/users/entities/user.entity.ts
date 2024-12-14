@@ -3,16 +3,12 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity({ name: 'users' })
 export class User {
   // primary id of user
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   // username of user
   @Column({ unique: true })
   username: string;
-
-  // description of user
-  @Column({ type: 'text', nullable: true })
-  description: string;
 
   //users current vertical line position
   @Column({ type: 'float8', nullable: true })
