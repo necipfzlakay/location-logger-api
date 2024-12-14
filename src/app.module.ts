@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
+import { UsersModule } from './users/users.module';
+import { LogsModule } from './logs/logs.module';
 
 @Module({
   imports: [
@@ -19,11 +21,14 @@ import { join } from 'path';
         port: ConfigService.get('DB_PORT'),
         username: ConfigService.get('DB_USERNAME'),
         password: ConfigService.get('DB_PASSWORD'),
-        database: ConfigService.get('DB_NAME'),
+        // database: ConfigService.get('DB_NAME'),
         entities: [join(process.cwd(), 'dist/**/*.entity.js')],
-        // synchronize: true,//! Don't use this in production
+        synchronize: true, //! Don't use this in production
+        logging: true,
       }),
     }),
+    UsersModule,
+    LogsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
