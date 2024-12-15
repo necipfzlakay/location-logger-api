@@ -15,11 +15,13 @@ class UserBehavior(TaskSet):
         self.client.get("/logs")
     
     def createUser(self): 
-        response = self.client.post("/users/create", 
-                                    json={"username": str(random.randint(1, 1000))  })
-        print(f"User created with id: {response.json()}")
-        self.user_id = response.json().get("id") 
-       
+        try:
+            response = self.client.post("/users/create", 
+                                        json={"username": str(random.randint(1, 1000))  })
+            print(f"User created with id: {response.json()}")
+            self.user_id = response.json().get("id") 
+        except Exception as e:
+            print(f"Error: {e}")
 
     def createAreas(self): 
         response = self.client.get("/areas/custom")
