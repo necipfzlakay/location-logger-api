@@ -72,7 +72,7 @@ export class AreasService {
   async addCustomLocations() {
     try {
       // read the taksim JSON file
-      const taksimData = fs.readFileSync('src/common/umraniye.json', 'utf-8');
+      const taksimData = fs.readFileSync('src/common/taksim.json', 'utf-8');
       const taksimCoordinates: number[][] = JSON.parse(taksimData);
       const taksimRaw = await this.create({
         polygon: taksimCoordinates,
