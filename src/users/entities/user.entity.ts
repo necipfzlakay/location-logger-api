@@ -1,5 +1,11 @@
 import { Logs } from 'src/logs/entities/log.entity';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User {
@@ -12,6 +18,6 @@ export class User {
   username: string;
 
   // Relationship with Logs entity
-  @OneToOne(() => Logs, (logs) => logs.user_id)
+  @OneToMany(() => Logs, (logs) => logs.user_id)
   logs: Logs;
 }
