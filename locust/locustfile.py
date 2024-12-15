@@ -25,7 +25,7 @@ class UserBehavior(TaskSet):
         response = self.client.get("/areas/custom")
         print(f"New Area: {response.json()}")
        
-
+    ## Create random location in Istanbul area
     def generate_random_location(self):
         min_lat = 41.000000
         max_lat = 42.000000

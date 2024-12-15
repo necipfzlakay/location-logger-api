@@ -12,23 +12,28 @@ export class LocationsService {
     private readonly areaService: AreasService,
   ) {}
 
+  /**
+   * Gets the location of a user and determines if the user is within a given area
+   * then logs the user's location
+   * @param getUsersLocationDto
+   */
   async getUserLocation(getUsersLocationDto: GetUsersLocationDto) {
     console.log('user location', getUsersLocationDto);
 
+    // Check if the user exists
     const user = await this.userService.findById(getUsersLocationDto.user_id);
     if (!user) throw new Error('User not found');
-
+    // Check is there any valid area
     const areas = await this.areaService.findAll();
     if (areas.length < 1) throw new Error('Areas not found');
     const userPoint = [getUsersLocationDto.long, getUsersLocationDto.lat];
 
+    // Check every area with user location in the foreach loop
     areas.forEach((area) => {
-      // console.log(area);
+      // Runs the isPointInPolygon function for each area for checking if the user is in the area
       const isPointInPolygon = this.isPointInPolygon(userPoint, area.polygon);
-      console.log(isPointInPolygon);
-
       if (isPointInPolygon) {
-        console.log('User is in the area');
+        // If the user is in the area, logs the user's location
         this.logService.create({
           user_id: getUsersLocationDto.user_id,
           area_id: area.id,
@@ -42,11 +47,11 @@ export class LocationsService {
   }
 
   /**
-   * Bir noktanın bir çokgenin içinde olup olmadığını kontrol eder.
+   * Determines if a point is inside a polygon
    * longitute = [0]
    * latitude = [1]
-   * @param point Kontrol edilecek nokta
-   * @param polygon Çokgenin köşe noktaları
+   * @param point User location
+   * @param polygon Area polygon points
    * @returns boolean
    */
   isPointInPolygon(point: any, polygon: any[]): boolean {
@@ -58,9 +63,9 @@ export class LocationsService {
       const xj = polygon[j][1],
         yj = polygon[j][0]; // Longitude ve Latitude
       const px = point[1],
-        py = point[0]; // Noktanın Longitude ve Latitude
+        py = point[0];
 
-      // Çokgenin kenarları boyunca kontrol yapar
+      // check if the point is on the edge of the polygon
       const intersect =
         yi > py !== yj > py && px < ((xj - xi) * (py - yi)) / (yj - yi) + xi;
 
