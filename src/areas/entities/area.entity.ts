@@ -7,14 +7,6 @@ export class Areas {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  // vertical line position of area
-  @Column({ type: 'float8', nullable: true })
-  long: number;
-
-  // horizontal line position of area
-  @Column({ type: 'float8', nullable: true })
-  lat: number;
-
   @Column({ type: 'jsonb', nullable: true })
   polygon: Array<[]>;
 
