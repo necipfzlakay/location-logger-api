@@ -24,16 +24,16 @@ export class LocationsService {
 
     areas.forEach((area) => {
       // console.log(area);
-      const iss = this.isPointInPolygon(userPoint, area.polygon);
-      console.log(iss, getUsersLocationDto);
-      // console.log('area', area);
-      if (iss) {
+      const isPointInPolygon = this.isPointInPolygon(userPoint, area.polygon);
+      console.log(isPointInPolygon);
+
+      if (isPointInPolygon) {
         console.log('User is in the area');
         this.logService.create({
           user_id: getUsersLocationDto.user_id,
           area_id: area.id,
-          lat: parseFloat(getUsersLocationDto.lat.toFixed(6)),
-          long: parseFloat(getUsersLocationDto.long.toFixed(6)),
+          lat: getUsersLocationDto.lat,
+          long: getUsersLocationDto.long,
           description: 'User is in the area',
         });
       }
@@ -59,20 +59,6 @@ export class LocationsService {
         yj = polygon[j][0]; // Longitude ve Latitude
       const px = point[1],
         py = point[0]; // Noktanın Longitude ve Latitude
-      console.log(
-        'xi:',
-        xi,
-        'yi:',
-        yi,
-        'xj:',
-        xj,
-        'yj:',
-        yj,
-        'px:',
-        px,
-        'py:',
-        py,
-      );
 
       // Çokgenin kenarları boyunca kontrol yapar
       const intersect =
