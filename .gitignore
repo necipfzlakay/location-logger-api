@@ -34,3 +34,4 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 *.spec.ts
+locust/__pycache__/locustfile.cpython-311.pyc
