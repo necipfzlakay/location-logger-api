@@ -5,15 +5,9 @@ export class GetUsersLocationDto {
   @IsNotEmpty({ message: 'user_id is required' })
   user_id: string;
 
-  @IsNumber(
-    { allowNaN: false, allowInfinity: false },
-    { message: 'longitude must be a number' },
-  )
+  // @IsNotEmpty({ message: 'long is required' })
   long?: number;
 
-  @IsNumber(
-    { allowNaN: false, allowInfinity: false },
-    { message: 'latitude must be a number' },
-  )
+  // @IsNotEmpty({ message: 'lat is required' })
   lat?: number;
 }
