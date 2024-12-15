@@ -11,14 +11,6 @@ export class User {
   @Column({ unique: true })
   username: string;
 
-  //users current vertical line position
-  @Column({ type: 'float8', nullable: true })
-  long: number;
-
-  //users current horizontal line position
-  @Column({ type: 'float8', nullable: true })
-  lat: number;
-
   // Relationship with Logs entity
   @OneToOne(() => Logs, (logs) => logs.user_id)
   logs: Logs;
