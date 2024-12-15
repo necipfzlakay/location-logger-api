@@ -1,5 +1,5 @@
 import { Logs } from 'src/logs/entities/log.entity';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'areas' })
 export class Areas {
@@ -15,6 +15,6 @@ export class Areas {
   name: string;
 
   // Relationship with Logs entity
-  @OneToOne(() => Logs, (logs) => logs.area_id)
+  @OneToMany(() => Logs, (logs) => logs.area_id)
   logs: Logs;
 }
