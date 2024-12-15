@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
@@ -32,20 +31,19 @@ export class UsersService {
     const user = await this.usersRepository.findOneBy({ username });
     return user;
   }
-  async findOne(id: string) {
+
+  async findAll() {
     try {
-      const user = await this.findById(id);
-      return user;
+      return await this.usersRepository.find();
     } catch (error) {
       throw new BadRequestException(error.message);
     }
   }
-
-  update(id: string, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: string) {
-    return `This action removes a #${id} user`;
+  async findOne(id: string) {
+    try {
+      return await this.findById(id);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }
