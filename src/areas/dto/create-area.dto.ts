@@ -1,22 +1,10 @@
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsArray, IsNotEmpty } from 'class-validator';
 
 export class CreateAreaDto {
-  @IsNumber(
-    { allowNaN: false, allowInfinity: false },
-    { message: 'longitude must be a number' },
-  )
-  @IsNotEmpty({ message: 'longitude is required' })
-  long?: number;
-
-  @IsNumber(
-    { allowNaN: false, allowInfinity: false },
-    { message: 'latitude must be a number' },
-  )
-  @IsNotEmpty({ message: 'latitude is required' })
-  lat?: number;
-
   name?: string;
 
   // polygon?: number[][];
+  @IsNotEmpty({ message: 'polygon is required' })
+  @IsArray({ message: 'polygon must be an array' })
   polygon?: any;
 }
