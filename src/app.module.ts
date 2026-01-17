@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AreasModule } from './areas/areas.module';
 import { LocationsModule } from './locations/locations.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { LocationsModule } from './locations/locations.module';
     }),
     AreasModule,
     LocationsModule,
+    UsersModule,
 
   ],
   controllers: [AppController],
