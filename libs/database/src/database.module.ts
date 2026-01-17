@@ -14,7 +14,7 @@ import { join } from 'path';
         port: ConfigService.get('DB_PORT'),
         username: ConfigService.get('DB_USERNAME'),
         password: ConfigService.get('DB_PASSWORD'),
-        // database: ConfigService.get('DB_NAME'),
+        database: ConfigService.get('DB_NAME'),
         entities: [join(process.cwd(), 'dist/**/*.entity.js')],
         synchronize: true, //! Don't use this in production
         logging: true,

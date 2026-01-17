@@ -2,34 +2,36 @@
 version: '3.9'
 
 services:
-  logger:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: logger
-    container_name: logger
-    restart: always
-    ports:
-      - 3333:3333
-    environment:
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=root
-      - DB_NAME=postgres
+  # logger:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   image: logger
+  #   container_name: logger
+  #   restart: always
+  #   ports:
+  #     - 3333:3333
+  #   environment:
+  #     - DB_HOST=db
+  #     - DB_PORT=5432
+  #     - DB_USERNAME=postgres
+  #     - DB_PASSWORD=root
+  #     - DB_NAME=postgres
 
   db:
-    image: postgres
+    image: postgres:16
     restart: always
     # set shared memory limit when using docker-compose
     shm_size: 128mb
     environment:
+      POSTGRES_DB: location_logger
+      POSTGRES_USER: root
       POSTGRES_PASSWORD: root
     ports:
       - 5432:5432
     volumes:
       # mount the volume to persist the data
-      - pgdata:/var/lib/postgresql/data
+      - pgdata_v2:/var/lib/postgresql/data
 
   adminer:
     image: adminer
@@ -51,4 +53,4 @@ services:
       - ./locust:/mnt/locust
     command: -f /mnt/locust/locustfile.py --worker --master-host master
 volumes:
-  pgdata:
+  pgdata_v2:
