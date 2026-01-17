@@ -1,3 +1,4 @@
+import { DatabaseModule } from '@app/database';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
@@ -11,6 +12,7 @@ import { UsersModule } from './users/users.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    DatabaseModule, // Postgres Database
     AreasModule,
     LocationsModule,
     UsersModule,
