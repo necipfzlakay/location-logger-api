@@ -10,14 +10,6 @@ export class Logs {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  // username of user
-  @Column({ unique: true })
-  username: string;
-
-  // Relationship with Logs entity
-  // @OneToMany(() => Logs, (logs) => logs.user_id)
-  // logs: Logs;
-
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
@@ -27,10 +19,10 @@ export class Logs {
   @Column()
   area_id: string;
 
-  @Column()
+  @Column({ type: 'float' })
   long: number;
 
-  @Column()
+  @Column({ type: 'float' })
   lat: number;
 
   @Column()

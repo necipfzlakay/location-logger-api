@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreateNewLogDto } from './dto/create-log.dto';
 import { Logs } from './entities/logs.entitiy';
 
 @Injectable()
@@ -10,7 +11,7 @@ export class LogsService {
     private readonly logsRepository: Repository<Logs>,
   ) { }
 
-  async create(log: any) {
+  async create(log: CreateNewLogDto) {
     try {
       return await this.logsRepository.save(log);
     } catch (error) {

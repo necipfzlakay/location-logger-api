@@ -6,5 +6,5 @@ export class CreateAreaDto {
   // polygon?: number[][];
   @IsNotEmpty({ message: 'polygon is required' })
   @IsArray({ message: 'polygon must be an array' })
-  polygon?: any;
+  polygon: Array<number[]>
 }

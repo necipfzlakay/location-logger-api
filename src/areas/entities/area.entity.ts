@@ -9,7 +9,7 @@ export class Areas {
   id: string;
 
   @Column({ type: 'jsonb', nullable: true })
-  polygon: Array<[]>;
+  polygon: number[][];
 
   // name of area (optional)
   @Column({ nullable: true })

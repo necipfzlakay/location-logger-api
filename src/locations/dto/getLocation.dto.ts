@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class GetUsersLocationDto {
   @IsString({ message: 'user_id must be a string' })
@@ -6,8 +6,8 @@ export class GetUsersLocationDto {
   user_id: string;
 
   // @IsNotEmpty({ message: 'long is required' })
-  long?: number;
+  long: number;
 
   // @IsNotEmpty({ message: 'lat is required' })
-  lat?: number;
+  lat: number;
 }
