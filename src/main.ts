@@ -7,6 +7,9 @@ async function bootstrap() {
   // //! if we want to add a prefix to all routes for versioning
   // app.setGlobalPrefix('v1');
   app.useGlobalPipes(new ValidationPipe({}));
-  await app.listen(process.env.PORT ?? 3333);
+  const port = process.env.PORT ?? 3333;
+  await app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
 }
 bootstrap();
