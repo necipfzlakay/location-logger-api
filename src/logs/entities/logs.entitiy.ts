@@ -1,8 +1,6 @@
-import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   Entity,
-  ManyToMany,
   PrimaryGeneratedColumn
 } from 'typeorm';
 
@@ -20,7 +18,10 @@ export class Logs {
   // @OneToMany(() => Logs, (logs) => logs.user_id)
   // logs: Logs;
 
-  @ManyToMany(() => User, (user) => user.id)
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  created_at: Date;
+
+  @Column()
   user_id: string;
 
   @Column()
@@ -31,4 +32,7 @@ export class Logs {
 
   @Column()
   lat: number;
+
+  @Column()
+  description: string;
 }
