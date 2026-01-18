@@ -82,7 +82,8 @@
     "moduleNameMapper": {
       "^@app/config-service(|/.*)$": "<rootDir>/libs/config-service/src/$1",
       "^@app/database(|/.*)$": "<rootDir>/libs/database/src/$1",
-      "^@app/libs(|/.*)$": "<rootDir>/libs/libs/src/$1"
+      "^@app/libs(|/.*)$": "<rootDir>/libs/libs/src/$1",
+      "^@app/shared(|/.*)$": "<rootDir>/libs/shared/src/$1"
     }
   }
 }

@@ -54,7 +54,7 @@ export class AreasService {
   }
 
   /**
-   * Returns an area by its id
+   * Returns an area by it's id
    * @param id
    * */
   async findById(id: string) {
@@ -72,7 +72,7 @@ export class AreasService {
   async addCustomLocations() {
     try {
       // read the taksim JSON file
-      const taksimData = fs.readFileSync('src/common/taksim.json', 'utf-8');
+      const taksimData = fs.readFileSync('libs/shared/Locations/taksim.json', 'utf-8');
       const taksimCoordinates: number[][] = JSON.parse(taksimData);
       const taksimRaw = await this.create({
         polygon: taksimCoordinates,
@@ -81,11 +81,11 @@ export class AreasService {
       this.areasRepository.save(taksimRaw);
 
       // read the umraniye JSON file
-      const umraniyeData = fs.readFileSync('src/common/umraniye.json', 'utf-8');
+      const umraniyeData = fs.readFileSync('libs/shared/Locations/kadikoy.json', 'utf-8');
       const umraniyeCoordinates: number[][] = JSON.parse(umraniyeData);
       const umraniyeRaw = await this.create({
         polygon: umraniyeCoordinates,
-        name: 'Umraniye',
+        name: 'Kadikoy',
       });
       this.areasRepository.save(umraniyeRaw);
       return true;
