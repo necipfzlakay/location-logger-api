@@ -1,10 +1,10 @@
-import { Logs } from 'src/logs/entities/log.entity';
+
+import { Logs } from 'src/logs/entities/logs.entitiy';
 import {
   Column,
   Entity,
   OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 
 @Entity({ name: 'users' })
