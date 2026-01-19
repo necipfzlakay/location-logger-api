@@ -2,21 +2,21 @@
 version: '3.9'
 
 services:
-  # logger:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   image: logger
-  #   container_name: logger
-  #   restart: always
-  #   ports:
-  #     - 3333:3333
-  #   environment:
-  #     - DB_HOST=db
-  #     - DB_PORT=5432
-  #     - DB_USERNAME=postgres
-  #     - DB_PASSWORD=root
-  #     - DB_NAME=postgres
+  logger:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: logger
+    container_name: logger
+    restart: always
+    ports:
+      - 3333:3333
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - DB_NAME=location_logger
 
   db:
     image: postgres:16
@@ -45,7 +45,7 @@ services:
       - '8089:8089'
     volumes:
       - ./locust:/mnt/locust
-    command: -f /mnt/locust/locustfile.py --master -H http://master:8089
+    command: "-f /mnt/locust/locustfile.py --master -H http://host.docker.internal:3333"
 
   worker:
     image: locustio/locust
