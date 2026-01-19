@@ -30,21 +30,12 @@ class UserBehavior(TaskSet):
                 self.user_id = response.json().get("id") 
         except Exception as e:
             print(f"Error in createUser: {e}")
-            # Ensure user_id is set to avoid AttributeError later, or handle it in task
             self.user_id = None
 
     def createAreas(self): 
         try:
-            # if area already exists, skip
-            areas_response = self.client.get("/areas")
-            areas = areas_response.json()
-            
-            if len(areas) > 0:
-                print(f"Areas: {areas}")
-            else:
-                response = self.client.post("/areas/custom")
-                print(f"New Area: {response.json()}")
-                self.area_id = response.json().get("id")
+            response = self.client.get("/areas/custom")
+            print(f"New Area: {response.json()}")
         except Exception as e:
              print(f"Error in createAreas: {e}")
              self.area_id = None
