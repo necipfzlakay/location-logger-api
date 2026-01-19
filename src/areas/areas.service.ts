@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as fs from 'fs';
 import { Repository } from 'typeorm';
@@ -6,11 +6,36 @@ import { CreateAreaDto } from './dto/create-area.dto';
 import { Areas } from './entities/area.entity';
 
 @Injectable()
-export class AreasService {
+export class AreasService implements OnModuleInit {
+  // In-memory cache for areas to avoid DB hits on every location check
+  private areasCache: Areas[] = [];
+
   constructor(
     @InjectRepository(Areas)
     private readonly areasRepository: Repository<Areas>,
   ) { }
+
+  /**
+   * Load all areas into cache when the module initializes
+   */
+  async onModuleInit() {
+    await this.refreshCache();
+  }
+
+  /**
+   * Refreshes the in-memory cache from the database
+   */
+  async refreshCache() {
+    this.areasCache = await this.areasRepository.find();
+    console.log(`Areas cache refreshed. Total areas: ${this.areasCache.length}`);
+  }
+
+  /**
+   * Returns areas from in-memory cache
+   */
+  getCachedAreas() {
+    return this.areasCache;
+  }
 
   /**
    * Creates an area with given coordinates
@@ -27,16 +52,20 @@ export class AreasService {
       });
 
       // prevent duplicate area names
-      const name = await this.areasRepository.findBy({
+      const existingArea = await this.areasRepository.findOneBy({
         name: createAreaDto.name,
       });
-      console.log('area===>', name);
 
-      if (name.length > 0) throw new Error('Area name already exists');
+      if (existingArea) throw new Error('Area name already exists');
 
-      // Save to database given area coordinates and return
+      // Save to database given area coordinates
       const area = this.areasRepository.create(createAreaDto);
-      return await this.areasRepository.save(area);
+      const savedArea = await this.areasRepository.save(area);
+
+      // Update cache
+      this.areasCache.push(savedArea);
+
+      return savedArea;
     } catch (error) {
       if (error.message === 'Area name already exists') {
         throw new BadRequestException("Already Exists");
@@ -50,7 +79,8 @@ export class AreasService {
    * */
   async findAll() {
     try {
-      return await this.areasRepository.find();
+      await this.refreshCache();
+      return this.areasCache;
     } catch (error) {
       throw new BadRequestException(error.message);
     }
@@ -77,20 +107,26 @@ export class AreasService {
       // read the taksim JSON file
       const taksimData = fs.readFileSync('libs/shared/Locations/taksim.json', 'utf-8');
       const taksimCoordinates: number[][] = JSON.parse(taksimData);
-      const taksimRaw = await this.create({
-        polygon: taksimCoordinates,
-        name: 'Taksim',
-      });
-      this.areasRepository.save(taksimRaw);
+      // Check if exists to avoid error during custom seeding
+      const taksimExists = await this.areasRepository.findOneBy({ name: 'Taksim' });
+      if (!taksimExists) {
+        await this.create({
+          polygon: taksimCoordinates,
+          name: 'Taksim',
+        });
+      }
 
-      // read the umraniye JSON file
+      // read the kadikoy JSON file
       const kadikoyData = fs.readFileSync('libs/shared/Locations/kadikoy.json', 'utf-8');
       const kadikoyCoordinates: number[][] = JSON.parse(kadikoyData);
-      const kadikoyRaw = await this.create({
-        polygon: kadikoyCoordinates,
-        name: 'Kadikoy',
-      });
-      this.areasRepository.save(kadikoyRaw);
+      const kadikoyExists = await this.areasRepository.findOneBy({ name: 'Kadikoy' });
+      if (!kadikoyExists) {
+        await this.create({
+          polygon: kadikoyCoordinates,
+          name: 'Kadikoy',
+        });
+      }
+      this.refreshCache();
       return true;
     } catch (error) {
       throw new BadRequestException(error.message);
