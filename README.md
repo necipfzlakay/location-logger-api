@@ -69,4 +69,6 @@ on the [Adminer](http://localhost:8080/) page
 
 <img width="1505" height="478" alt="image" src="https://github.com/user-attachments/assets/784ae78e-7519-4e7c-9e30-7b00a90f641f" />
 <img width="1434" height="834" alt="image" src="https://github.com/user-attachments/assets/62397901-832d-4da0-9868-4d97d037a7bf" />
+<img width="1352" height="818" alt="image" src="https://github.com/user-attachments/assets/a74d6462-52d6-49c3-8ac5-24c8fce09768" />
+
 
