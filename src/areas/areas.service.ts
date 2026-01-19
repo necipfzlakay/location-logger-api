@@ -19,6 +19,8 @@ export class AreasService implements OnModuleInit {
    * Load all areas into cache when the module initializes
    */
   async onModuleInit() {
+    console.log('AreasService: onModuleInit');
+    await this.addCustomLocations();
     await this.refreshCache();
   }
 
