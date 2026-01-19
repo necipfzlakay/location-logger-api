@@ -38,6 +38,9 @@ export class AreasService {
       const area = this.areasRepository.create(createAreaDto);
       return await this.areasRepository.save(area);
     } catch (error) {
+      if (error.message === 'Area name already exists') {
+        throw new BadRequestException("Already Exists");
+      }
       throw new BadRequestException(error.message);
     }
   }
