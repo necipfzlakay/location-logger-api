@@ -84,13 +84,13 @@ export class AreasService {
       this.areasRepository.save(taksimRaw);
 
       // read the umraniye JSON file
-      const umraniyeData = fs.readFileSync('libs/shared/Locations/kadikoy.json', 'utf-8');
-      const umraniyeCoordinates: number[][] = JSON.parse(umraniyeData);
-      const umraniyeRaw = await this.create({
-        polygon: umraniyeCoordinates,
+      const kadikoyData = fs.readFileSync('libs/shared/Locations/kadikoy.json', 'utf-8');
+      const kadikoyCoordinates: number[][] = JSON.parse(kadikoyData);
+      const kadikoyRaw = await this.create({
+        polygon: kadikoyCoordinates,
         name: 'Kadikoy',
       });
-      this.areasRepository.save(umraniyeRaw);
+      this.areasRepository.save(kadikoyRaw);
       return true;
     } catch (error) {
       throw new BadRequestException(error.message);
