@@ -31,8 +31,12 @@ export class UsersService {
    * @param id
    */
   async findById(id: string) {
-    const user = await this.usersRepository.findOneBy({ id });
-    return user;
+    try {
+      const user = await this.usersRepository.findOneBy({ id });
+      return user;
+    } catch (error) {
+      throw new BadRequestException('User not found');
+    }
   }
 
   /**
@@ -40,8 +44,12 @@ export class UsersService {
    * @param username
    */
   async findByUsername(username: string) {
-    const user = await this.usersRepository.findOneBy({ username });
-    return user;
+    try {
+      const user = await this.usersRepository.findOneBy({ username });
+      return user;
+    } catch (error) {
+      throw new BadRequestException('User not found');
+    }
   }
 
   /**
