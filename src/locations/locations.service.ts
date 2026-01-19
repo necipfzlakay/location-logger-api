@@ -18,32 +18,50 @@ export class LocationsService {
    * @param getUsersLocationDto
    */
   async getUserLocation(getUsersLocationDto: GetUsersLocationDto) {
-    console.log('user location', getUsersLocationDto);
-
     // Check if the user exists
+    // Optimization Note: In extremely high load, user check might also be cached or skipped
+    // if trusting the source (e.g. JWT token verified before controller).
     const user = await this.userService.findById(getUsersLocationDto.user_id);
     if (!user) throw new Error('User not found');
-    // Check is there any valid area
-    const areas = await this.areaService.findAll();
-    if (areas.length < 1) throw new Error('Areas not found');
-    const userPoint = [getUsersLocationDto.long, getUsersLocationDto.lat];
 
-    // Check every area with user location in the foreach loop
-    areas.forEach((area) => {
+    // Use cached areas to prevent DB flooding
+    const areas = await this.getCachedAreas();
+
+    // If cache is empty (e.g. first run or no areas), try to fetch once or warn
+    if (areas.length < 1) {
+      // Optional: Try to refresh cache if empty, or just return.
+      console.warn('No areas found in cache.');
+      // We can return early as there are no areas to check against
+      return { userPoint: [getUsersLocationDto.long, getUsersLocationDto.lat], ...getUsersLocationDto };
+    }
+
+    const userPoint = [getUsersLocationDto.long, getUsersLocationDto.lat];
+    const logPromises: Promise<any>[] = [];
+
+    // Use a loop that supports async properly, or map to promises for parallelism
+    for (const area of areas) {
       // Runs the isPointInPolygon function for each area for checking if the user is in the area
       const isPointInPolygon = this.isPointInPolygon(userPoint, area.polygon);
+
       if (isPointInPolygon) {
-        // If the user is in the area, logs the user's location
-        console.log('User is in the area', getUsersLocationDto);
-        this.logService.create({
-          user_id: getUsersLocationDto.user_id,
-          area_id: area.id,
-          lat: getUsersLocationDto.lat,
-          long: getUsersLocationDto.long,
-          description: 'User is in the area',
-        });
+        // Prepare log creation promise
+        logPromises.push(
+          this.logService.create({
+            user_id: getUsersLocationDto.user_id,
+            area_id: area.id,
+            lat: getUsersLocationDto.lat,
+            long: getUsersLocationDto.long,
+            description: 'User is in the area',
+          })
+        );
       }
-    });
+    }
+
+    // Execute all log writes in parallel
+    if (logPromises.length > 0) {
+      await Promise.all(logPromises);
+    }
+
     return { userPoint, ...getUsersLocationDto };
   }
 
@@ -74,5 +92,16 @@ export class LocationsService {
     }
 
     return isInside;
+  }
+
+  /**
+   * Get Areas from cache
+   */
+  async getCachedAreas() {
+    const areas = this.areaService.getCachedAreas();
+    if (areas.length < 1) {
+      await this.areaService.refreshCache();
+    }
+    return this.areaService.getCachedAreas();
   }
 }
