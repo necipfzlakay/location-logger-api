@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -22,7 +22,7 @@ export class UsersService {
       const newUser = this.usersRepository.create(createUserDto);
       return await this.usersRepository.save(newUser);
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new ConflictException(error.message);
     }
   }
 
