@@ -1,23 +1,26 @@
-# Use the official Node.js image from the Docker Hub
-FROM node:latest
+# LTS Node.js version
+FROM node:22-alpine
 
-# Create and change to the app directory
+# Add pnpm globally
+RUN npm install -g pnpm
+
+# Create application directory
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
+# Copy package.json and pnpm-lock.yaml files
+COPY package.json pnpm-lock.yaml ./
 
-# Install dependencies
-RUN npm install
+# Install dependencies (frozen-lockfile locks the versions)
+RUN pnpm install --frozen-lockfile
 
-# Copy the rest of the application code
+# Copy application code
 COPY . .
 
-# Build the NestJS application
-RUN npm run build
+# Build NestJS application
+RUN pnpm run build
 
-# Expose the port the app runs on
+# Expose port
 EXPOSE 3333
 
-# Define the command to run the app
-CMD ["npm", "run", "start:prod"]
+# Start application
+CMD ["pnpm", "run", "start:prod"]
